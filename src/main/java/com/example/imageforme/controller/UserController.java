@@ -68,18 +68,14 @@ public class UserController {
 	@PutMapping("/user/{username}")
 	public ResponseEntity<ImageUser> updateUser(@PathVariable("username") String username, @RequestBody ImageUser user) {
 		Optional<ImageUser> actualUser = userRepository.findById(username);
-		Optional<ImageUser> editedUser = userRepository.findById(user.getUsername());
+		//Optional<ImageUser> editedUser = userRepository.findById(user.getUsername());
 
 		if (actualUser.isPresent()) {
 			ImageUser userToEdit = actualUser.get();
-			if(!editedUser.isPresent()) {
-				//userToEdit.setUsername(user.getUsername());
-				userToEdit.setEmail(user.getEmail());
-				userToEdit.setPassword(user.getPassword());
-				return new ResponseEntity<>(userRepository.save(userToEdit), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-			}
+			userToEdit.setUsername(user.getUsername());
+			userToEdit.setEmail(user.getEmail());
+			userToEdit.setPassword(user.getPassword());
+			return new ResponseEntity<>(userRepository.save(userToEdit), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
